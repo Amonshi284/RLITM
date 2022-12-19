@@ -220,6 +220,7 @@ class Player:
         self.states_value = pickle.load(fr)
         fr.close()
 
+
 class HumanPlayer:
     def __init__(self, name):
         self.name = name
@@ -228,7 +229,7 @@ class HumanPlayer:
         while True:
             row = int(input("Input your action row:"))
             col = int(input("Input your action col:"))
-            action = (row, col)
+            action = (row-1, col-1)
             if action in positions:
                 return action
 
@@ -244,11 +245,16 @@ class HumanPlayer:
         pass
     
 if __name__ == "__main__":
+
     p1 = Player("p1")
+    p1.loadPolicy("policy_p1")
     p2 = Player("p2")
-    
-    st = State(p1, p2)
-    st.play(5000)
+    p2.loadPolicy("policy_p2")
+
+#    st = State(p1, p2)
+#    p2.savePolicy()
+#    p1.savePolicy()
+#    st.play(50000)
 
     p1 = Player("computer", exp_rate=0)
     p1.loadPolicy("policy_p1")
