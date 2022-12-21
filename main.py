@@ -125,6 +125,9 @@ class State:
                     print(self.p1.name, "wins!")
                 else:
                     print("tie!")
+                self.giveReward()
+                self.p1.reset()
+                self.p2.reset()
                 self.reset()
                 break
 
@@ -141,6 +144,9 @@ class State:
                         print(self.p2.name, "wins!")
                     else:
                         print("tie!")
+                    self.giveReward()
+                    self.p1.reset()
+                    self.p2.reset()
                     self.reset()
                     break
 
@@ -251,10 +257,10 @@ if __name__ == "__main__":
     p2 = Player("p2")
     p2.loadPolicy("policy_p2")
 
-#    st = State(p1, p2)
-#    p2.savePolicy()
-#    p1.savePolicy()
-#    st.play(50000)
+    st = State(p1, p2)
+    st.play(5000)
+    p2.savePolicy()
+    p1.savePolicy()
 
     p1 = Player("computer", exp_rate=0)
     p1.loadPolicy("policy_p1")
