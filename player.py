@@ -1,5 +1,6 @@
 import numpy as np
 import pickle
+import ned
 
 BOARD_ROWS_COLS = 3
 
@@ -29,7 +30,7 @@ class Player:
                 value = 0 if self.states_value.get(next_boardHash) is None else self.states_value.get(next_boardHash)
 
                 if value >= value_max:
-                    value_max =value
+                    value_max = value
                     action = p
 
         return action
@@ -63,12 +64,7 @@ class HumanPlayer:
         self.name = name
 
     def chooseAction(self, positions, _, __):
-        while True:
-            row = int(input("Input your action row:"))
-            col = int(input("Input your action col:"))
-            action = (row-1, col-1)
-            if action in positions:
-                return action
+        return ned.find_new_pos(positions)
 
     # append a hash state
     def addState(self, state):
