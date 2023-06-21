@@ -2,7 +2,7 @@ from pyniryo import *
 from player import Player
 from player import HumanPlayer
 from state import State
-from nine_mens_morris import *
+from nine_mens_morris import nmm_game
 
 
 # - Constants
