@@ -1,4 +1,6 @@
 import numpy as np
+
+import ned
 import player
 from ned import tictactoe_place
 
@@ -147,6 +149,7 @@ class State:
                 self.giveReward()
                 if win == 1:
                     print(self.p1.name, "wins!")
+                    ned.robot.play_sound("mixkit-achievement-bell-600.wav")
                 else:
                     print("tie!")
                 self.reset()
@@ -185,6 +188,7 @@ class State:
                     self.giveReward()
                     if win == -1:
                         print(self.p2.name, "wins!")
+                        ned.robot.play_sound("mixkit-achievement-bell-600.wav")
                     else:
                         print("tie!")
                     self.reset()

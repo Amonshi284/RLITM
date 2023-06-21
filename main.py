@@ -1,4 +1,3 @@
-from pyniryo import *
 from player import Player
 from player import HumanPlayer
 from state import State
@@ -15,7 +14,7 @@ if __name__ == "__main__":
     p2.loadPolicy("policy_p1")
 
     st = State(p1, p2)
-    st.play(5000)
+    # st.play(500)
     p2.savePolicy()
     p1.savePolicy()
 
@@ -24,5 +23,6 @@ if __name__ == "__main__":
     p1 = HumanPlayer("human")
     st = State(p1, p2)
     st.play2()
+
     p1.savePolicy()
     p2.savePolicy()
