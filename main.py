@@ -2,7 +2,7 @@ from pyniryo import *
 from player import Player
 from player import HumanPlayer
 from state import State
-from nine_mens_morris import *
+from nine_mens_morris import nmm_game
 
 
 # - Constants
@@ -20,7 +20,7 @@ if __name__ == "__main__":
         p2.loadPolicy("policy_p1")
 
         st = State(p1, p2)
-        st.play(5000)
+        # st.play(5000)
         p2.savePolicy()
         p1.savePolicy()
 

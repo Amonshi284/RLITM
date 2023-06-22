@@ -1,4 +1,6 @@
 # Imports
+import time
+
 from pyniryo import *
 import numpy as np
 
@@ -15,8 +17,13 @@ observation_pose = PoseObject(
     x=0.174, y=0, z=0.321,
     roll=2.985, pitch=1.408, yaw=2.975
 )
+#Selbststützende Position
+solid_pose = PoseObject(
+    x=0.033, y=0.217, z=0.086,
+    roll=2.498, pitch=1.549, yaw=-2.385
+)
 
-#Rampe
+# Rampe
 pick_pose = PoseObject(
     x=0.153, y=0.21, z=0.166,
     roll=-0.125, pitch=1.185, yaw=-0.024,
@@ -114,8 +121,23 @@ def tictactoe_place(index):
 
 
 def find_new_pos(pos):
+    robot.move_pose(solid_pose)
+
+    robot.set_learning_mode(True)
+    time.sleep(3)
+    joints_o = robot.get_joints()
+
+    robot_moved = False
+    while not robot_moved:
+        joints = robot.get_joints()
+        for x in range(0, len(joints)):
+            if abs(joints[x] - joints_o[x]) > 0.0872665:
+                robot_moved = True
+                break
+            joints_o[x] = joints_o[x] * 0.9 + joints[x] * 0.1
+        time.sleep(0.1)
+    # input("When done press enter")
     robot.move_pose(observation_pose)
-    input("When done press enter")
     # Getting image
     img_compressed = robot.get_img_compressed()
     # Uncompressing image
@@ -125,10 +147,12 @@ def find_new_pos(pos):
     workspace_found, res_img_markers = debug_markers(img_undistorted)
     if workspace_found:
         img_workspace = extract_img_workspace(img_undistorted, workspace_ratio=1.0)
+        img_stones, stones = findstones("any", img_workspace)
     else:
         img_workspace = None
+        print("Hände weg vom workspace und noch mal versuchen")
+        return find_new_pos(pos)
 
-    img_stones, stones = findstones("any", img_workspace)
     spaces = []
     spaces = checkspaces(stones, img_workspace, spaces)
     newpos = []
