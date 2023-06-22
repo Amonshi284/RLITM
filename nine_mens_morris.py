@@ -1,3 +1,5 @@
+from ned import nmm_place
+
 board = [[0 for x in range(8)] for y in range(3)]
 
 
@@ -26,8 +28,21 @@ class Player:
         return False
 
 
+class BotPlayer(Player):
+    def __init__(self, token):
+        super().__init__(token)
+        self.token = token
+        if self.token == "X":
+            self.name = "\033[0;37;41mPlayer 1\033[0m"
+        if self.token == "O":
+            self.name = "\033[0;37;44mPlayer 2\033[0m"
+
+    def move(self):
+        nmm_place(1)
+
+
 player1 = Player("X")
-player2 = Player("O")
+player2 = BotPlayer("O")
 
 
 def print_board():

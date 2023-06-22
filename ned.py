@@ -35,7 +35,7 @@ place_pose = PoseObject(
 )
 
 
-positions = [
+tic_tac_toe_positions = [
     robot.get_target_pose_from_rel(workspace_name, height_offset=0.005, x_rel=0.2, y_rel=0.2, yaw_rel=0),
     robot.get_target_pose_from_rel(workspace_name, height_offset=0.005, x_rel=0.5, y_rel=0.2, yaw_rel=0),
     robot.get_target_pose_from_rel(workspace_name, height_offset=0.005, x_rel=0.8, y_rel=0.2, yaw_rel=0),
@@ -107,7 +107,7 @@ def checkspaces(stones, img, spcs):
 
 def tictactoe_place(index):
     preposition = PoseObject(x=0.153, y=0.141, z=0.306, roll=-0.077, pitch=1.188, yaw=0.016,)
-    pos = positions[index-1]
+    pos = tic_tac_toe_positions[index - 1]
     robot.release_with_tool()
     robot.move_pose(preposition)
     robot.move_pose(pick_pose)
@@ -118,6 +118,10 @@ def tictactoe_place(index):
     robot.move_pose(observation_pose)
     robot.place_from_pose(pos)
     robot.move_pose(observation_pose)
+
+
+def nmm_place(index):
+    print("Test :D " + index)
 
 
 def find_new_pos(pos):
