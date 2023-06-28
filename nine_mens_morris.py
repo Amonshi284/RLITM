@@ -27,6 +27,27 @@ class Player:
                         return True
         return False
 
+    def player_input(self):
+        valid = 0
+        while valid == 0:
+            x = int(input(self.name + " Outside = 0, Center = 1, Inside = 2\n"))
+            while x > 2 or x < 0:
+                print("incorrect input")
+                x = int(input(self.name + " Outside = 0, Center = 1, Inside = 2\n"))
+            y = int(input("0 - 7 Clockwise\n"))
+            while y > 7 or y < 0:
+                print("incorrect input")
+                y = int(input("0 - 7 Clockwise\n"))
+            valid = 1
+            a = [x, y]
+            return a
+
+    def reward(self, reward):
+        if reward < 0:
+            print(":(")
+        else:
+            print(":)")
+
 
 class BotPlayer(Player):
     def __init__(self, token):
@@ -75,7 +96,7 @@ def print_board():
     print(string)
 
 
-def input_and_validation(player):
+def _input_and_validation(player):
     valid = 0
     while valid == 0:
         x = int(input(player.name + " Outside = 0, Center = 1, Inside = 2\n"))
@@ -86,8 +107,7 @@ def input_and_validation(player):
         while y > 7 or y < 0:
             print("incorrect input")
             y = int(input("0 - 7 Clockwise\n"))
-        if board[x][y] != 0 and board[x][y] != "╬":
-            print("Position besetzt, neue Eingabe " + board[x][y].__str__())
+
         else:
             board[x][y] = player.token
             if token_check(x, y):
@@ -174,6 +194,7 @@ def get_legal_moves(x, y):
 
 
 def move_token(player, x, y):
+    TODO Check legal moves before select!!
     legal_moves = get_legal_moves(x, y)
     print(legal_moves)
     valid_input = False
@@ -195,7 +216,7 @@ def move_token(player, x, y):
             print("invalid position\nthe legal moves are: " + legal_moves)
 
 
-def remove_token(player):
+def _remove_token(player):
     print_board()
     print("Select token to remove")
     valid_input = False
@@ -233,11 +254,23 @@ def phase_one():
     stones_placed = 0
     while stones_placed <= 17:
         print(stones_placed)
-        if stones_placed % 2 == 0:
-            input_and_validation(player1)
-        else:
-            input_and_validation(player2)
-        print_board()
+        valid = False
+        while not valid:
+            if stones_placed % 2 == 0:
+                current_player = player1
+            else:
+                current_player = player2
+            a = current_player.player_input()
+            x = a[0]
+            y = a[1]
+            if board[x][y] != 0 and board[x][y] != "╬":
+                print("Position besetzt, neue Eingabe " + board[x][y].__str__())
+                current_player.reward(-1)
+            else:
+                board[x][y] = current_player.token
+                current_player.reward(1)
+                valid = True
+            print_board()
         stones_placed += 1
 
 
