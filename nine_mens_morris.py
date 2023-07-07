@@ -1,6 +1,7 @@
 # from ned import nmm_place
 
 board = [[0 for x in range(8)] for y in range(3)]
+turns_without_mill = 0
 
 
 class Player:
@@ -39,17 +40,20 @@ class Player:
     def player_input(self):
         valid = 0
         while valid == 0:
-            x = int(input(self.name + " Outside = 0, Center = 1, Inside = 2\n"))
-            while x > 2 or x < 0:
-                print("incorrect input")
+            try:
                 x = int(input(self.name + " Outside = 0, Center = 1, Inside = 2\n"))
-            y = int(input("0 - 7 Clockwise\n"))
-            while y > 7 or y < 0:
-                print("incorrect input")
+                while x > 2 or x < 0:
+                    print("incorrect input")
+                    x = int(input(self.name + " Outside = 0, Center = 1, Inside = 2\n"))
                 y = int(input("0 - 7 Clockwise\n"))
-            valid = 1
-            a = [x, y]
-            return a
+                while y > 7 or y < 0:
+                    print("incorrect input")
+                    y = int(input("0 - 7 Clockwise\n"))
+                valid = 1
+                a = [x, y]
+                return a
+            except ValueError:
+                print("Invalid input")
 
     def reward(self, reward):
         if reward < 0:
@@ -104,6 +108,8 @@ def print_board():
     string = string.replace("O", "\033[0;37;44mO\033[0m")
     string += "\n" + player1.name + " Current Tokens: " + player1.current_player_tokens().__str__() + " \t" + \
               player2.name + " Current Tokens: " + player2.current_player_tokens().__str__()
+    if turns_without_mill > 0:
+        string += "\t No mills for " + turns_without_mill.__str__() + " Turn(s)"
     print(string)
 
 
@@ -211,16 +217,26 @@ def move_token(player):
                             legal_moves += i.__str__() + j.__str__() + " "
             else:
                 legal_moves = get_legal_moves(x, y)
+                print_board()
+                board[x][y] = 0
             valid_input = True
-    print("Select new position\nAvailable Position: " + legal_moves)
+    print(player.name + " Select new position\nAvailable Position: " + legal_moves)
     valid_input = False
     while not valid_input:
         a = player.player_input()
         x = a[0]
         y = a[1]
-        if not tokens.__contains__(x.__str__() + y.__str__()):
+        if not legal_moves.__contains__(x.__str__() + y.__str__()):
             print("not a valid position select another!")
             print("legal moves: " + legal_moves)
+        else:
+            valid_input = True
+            board[x][y] = player.token
+            global turns_without_mill
+            if token_check(x, y):
+                turns_without_mill = 0
+            else:
+                turns_without_mill += 1
 
 
 def remove_token(player):
@@ -284,12 +300,39 @@ def phase_one():
             remove_token(current_player)
 
 
+def testBoard():
+    board[0][0] = "X"
+    board[0][1] = "X"
+    board[0][2] = "O"
+    board[0][3] = "O"
+    board[0][4] = "X"
+    board[0][5] = "X"
+    board[0][6] = "O"
+    board[0][7] = "O"
+    board[1][0] = "O"
+    board[1][1] = "O"
+    board[1][2] = "X"
+    board[1][3] = "X"
+    board[1][4] = "O"
+    board[1][5] = "O"
+    board[1][6] = "X"
+    board[1][7] = "X"
+    board[2][0] = "X"
+    board[2][1] = 0
+    board[2][2] = 0
+    board[2][3] = 0
+    board[2][4] = 0
+    board[2][5] = 0
+    board[2][6] = 0
+    board[2][7] = "O"
+    print_board()
+
+
 def phase_two():
     print_board()
     x = 3
     y = 8
     turn = 0
-    turns_without_mill = 0
     while turns_without_mill < 20:
         if turn % 2 == 0:
             current_player = player1
@@ -298,15 +341,12 @@ def phase_two():
         turn += 1
         move_token(current_player)
         print_board()
-        if check():
-            turns_without_mill = 0
-        else:
-            turns_without_mill += 1
         if check_token_count():
             return
     print("Draw")
 
 
 def nmm_game():
-    phase_one()
+    # phase_one()
+    testBoard()
     phase_two()
