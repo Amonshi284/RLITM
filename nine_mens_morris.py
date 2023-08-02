@@ -1,4 +1,4 @@
-# from ned import nmm_place
+from ned import nmm_place
 
 board = [[0 for x in range(8)] for y in range(3)]
 turns_without_mill = 0
@@ -71,9 +71,11 @@ class BotPlayer(Player):
         if self.token == "O":
             self.name = "\033[0;37;44mPlayer 2\033[0m"
 
-    def move(self):
-        # nmm_place(1)
-        print("place oder so")
+    def move(self, x, y, token=-1):
+        print(token)
+        index = x * 8 + y
+        print(index)
+        nmm_place(index, token)
 
 
 player1 = Player("X")
@@ -235,6 +237,7 @@ def move_token(player):
             global turns_without_mill
             if token_check(x, y):
                 turns_without_mill = 0
+                remove_token(player)
             else:
                 turns_without_mill += 1
 
@@ -300,7 +303,7 @@ def phase_one():
             remove_token(current_player)
 
 
-def testBoard():
+def test_board():
     board[0][0] = "X"
     board[0][1] = "X"
     board[0][2] = "O"
@@ -316,14 +319,14 @@ def testBoard():
     board[1][4] = "O"
     board[1][5] = "O"
     board[1][6] = "X"
-    board[1][7] = "X"
+    board[1][7] = 0
     board[2][0] = "X"
     board[2][1] = 0
     board[2][2] = 0
     board[2][3] = 0
     board[2][4] = 0
     board[2][5] = 0
-    board[2][6] = 0
+    board[2][6] = "X"
     board[2][7] = "O"
     print_board()
 
@@ -347,6 +350,7 @@ def phase_two():
 
 
 def nmm_game():
+    player2.move(2, 6)
     # phase_one()
-    testBoard()
-    phase_two()
+    # test_board()
+    # phase_two()

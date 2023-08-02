@@ -1,6 +1,6 @@
 import numpy as np
 import pickle
-import ned
+# import ned
 
 BOARD_ROWS_COLS = 3
 
