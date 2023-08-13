@@ -72,6 +72,7 @@ nnm_positions = [
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=0.35, yaw_rel=0),  # 21
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.65, y_rel=0.35, yaw_rel=0),  # 22
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.65, y_rel=0.5, yaw_rel=0)  # 23
+    # robot.place_from_pose()
 ]
 
 
@@ -152,11 +153,15 @@ def nmm_place(index, token):
     field_observation_pose = PoseObject(x=0.148, y=0.0, z=0.352, roll=3.122, pitch=1.566, yaw=3.122)
     token_observation_pose = PoseObject(x=0.01, y=0.148, z=0.352, roll=3.122, pitch=1.566, yaw=-1.657)
     robot.release_with_tool()
-    robot.move_pose(field_observation_pose)
-    robot.wait(0.5)
-    robot.move_pose(token_observation_pose)
-    robot.wait(0.1)
-    robot.vision_pick("Muehle_steine", height_offset=0.0, shape=ObjectShape.ANY, color=ObjectColor.RED)
+    if token < 0:
+        robot.move_pose(token_observation_pose)
+        robot.wait(0.1)
+        robot.vision_pick("Muehle_steine", height_offset=0.0, shape=ObjectShape.ANY, color=ObjectColor.RED)
+    else:
+        robot.move_pose(field_observation_pose)
+        robot.wait(0.1)
+        robot.pick_from_pose(nnm_positions[token])
+        robot.move_pose(field_observation_pose)
     robot.grasp_with_tool()
     robot.move_pose(field_observation_pose)
     robot.place_from_pose(pos)

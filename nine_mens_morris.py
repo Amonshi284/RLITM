@@ -71,10 +71,14 @@ class BotPlayer(Player):
         if self.token == "O":
             self.name = "\033[0;37;44mPlayer 2\033[0m"
 
-    def move(self, x, y, token=-1):
-        print(token)
+    def move(self, x, y, x2=-1, y2=-1):
         index = x * 8 + y
+        if x2 and y2 ==-1:
+            token = -1
+        else:
+            token = x2 * 8 + y2
         print(index)
+        print(token)
         nmm_place(index, token)
 
 
@@ -203,6 +207,8 @@ def move_token(player):
     print("Movable tokens: " + tokens)
     print("Select token to move")
     legal_moves = ""
+    token_to_move_x, token_to_move_y = -1
+    token_pos_x, token_pos_y = -1
     valid_input = False
     while not valid_input:
         a = player.player_input()
@@ -222,6 +228,9 @@ def move_token(player):
                 print_board()
                 board[x][y] = 0
             valid_input = True
+            if player == player2:
+                token_to_move_x = x
+                token_to_move_y = y
     print(player.name + " Select new position\nAvailable Position: " + legal_moves)
     valid_input = False
     while not valid_input:
@@ -240,6 +249,10 @@ def move_token(player):
                 remove_token(player)
             else:
                 turns_without_mill += 1
+            if player == player2:
+                token_pos_x = x
+                token_pos_y = y
+                player2.move(token_pos_x, token_pos_y, token_to_move_x, token_to_move_y)
 
 
 def remove_token(player):
@@ -263,6 +276,8 @@ def remove_token(player):
             board[x][y] = 0
             player.reward(1)
             valid_input = True
+            if player == player2:
+                player2.move(x, y)
 
 
 def check_token_count():
@@ -296,6 +311,8 @@ def phase_one():
                 board[x][y] = current_player.token
                 current_player.reward(1)
                 valid = True
+                if current_player == player2:
+                    player2.move(x, y)
             print_board()
         stones_placed += 1
         if check():
@@ -350,7 +367,7 @@ def phase_two():
 
 
 def nmm_game():
-    player2.move(2, 6)
-    # phase_one()
+    # player2.move(2, 6)
+    phase_one()
     # test_board()
-    # phase_two()
+    phase_two()
