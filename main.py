@@ -15,21 +15,21 @@ if __name__ == "__main__":
 
     if game_selected != 2:
         p1 = Player("p1")
-        p1.loadPolicy("policy_p2")
+        p1.load_policy("policy_p2")
         p2 = Player("p2")
-        p2.loadPolicy("policy_p1")
+        p2.load_policy("policy_p1")
 
         st = State(p1, p2)
         # st.play(5000)
-        p2.savePolicy()
-        p1.savePolicy()
+        p2.save_policy()
+        p1.save_policy()
 
-        p2 = Player("p2", exp_rate=0)
-        p2.loadPolicy("policy_p2")
+        p2 = Player("p2", exp_rate=0, learn_rate=0.01)
+        p2.load_policy("policy_p2")
         p1 = HumanPlayer("human")
         st = State(p1, p2)
         st.play2()
-        p1.savePolicy()
-        p2.savePolicy()
+        p1.save_policy()
+        p2.save_policy()
     else:
         nmm_game()

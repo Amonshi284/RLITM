@@ -17,7 +17,7 @@ observation_pose = PoseObject(
     x=0.174, y=0, z=0.321,
     roll=2.985, pitch=1.408, yaw=2.975
 )
-#Selbststützende Position
+# Selbststützende Position
 solid_pose = PoseObject(
     x=0.033, y=0.217, z=0.086,
     roll=2.498, pitch=1.549, yaw=-2.385
@@ -25,8 +25,8 @@ solid_pose = PoseObject(
 
 # Rampe
 pick_pose = PoseObject(
-    x=0.153, y=0.21, z=0.166,
-    roll=-0.125, pitch=1.185, yaw=-0.024,
+    x=0.2, y=0.166, z=0.169,
+    roll=0.102, pitch=1.185, yaw=0.751,
 )
 # Place pose
 place_pose = PoseObject(
@@ -34,6 +34,10 @@ place_pose = PoseObject(
     roll=0.0, pitch=1.57, yaw=-1.57
 )
 
+preposition = PoseObject(
+    x=0.153, y=0.141, z=0.306,
+    roll=-0.077, pitch=1.188, yaw=0.016
+)
 
 tic_tac_toe_positions = [
     robot.get_target_pose_from_rel(workspace_name, height_offset=0.005, x_rel=0.2, y_rel=0.2, yaw_rel=0),
@@ -106,7 +110,6 @@ def checkspaces(stones, img, spcs):
 
 
 def tictactoe_place(index):
-    preposition = PoseObject(x=0.153, y=0.141, z=0.306, roll=-0.077, pitch=1.188, yaw=0.016,)
     pos = tic_tac_toe_positions[index - 1]
     robot.release_with_tool()
     robot.move_pose(preposition)
@@ -125,21 +128,21 @@ def nmm_place(index):
 
 
 def find_new_pos(pos):
-    robot.move_pose(solid_pose)
-
-    robot.set_learning_mode(True)
     time.sleep(3)
-    joints_o = robot.get_joints()
-
-    robot_moved = False
-    while not robot_moved:
-        joints = robot.get_joints()
-        for x in range(0, len(joints)):
-            if abs(joints[x] - joints_o[x]) > 0.0872665:
-                robot_moved = True
-                break
-            joints_o[x] = joints_o[x] * 0.9 + joints[x] * 0.1
-        time.sleep(0.1)
+    # robot.move_pose(preposition)
+    # robot.move_pose(solid_pose)
+    # robot.set_learning_mode(True)
+    # time.sleep(3)
+    # joints_o = robot.get_joints()
+    # robot_moved = False
+    # while not robot_moved:
+    #     joints = robot.get_joints()
+    #     for x in range(0, len(joints)):
+    #         if abs(joints[x] - joints_o[x]) > 0.0872665:
+    #             robot_moved = True
+    #             break
+    #         joints_o[x] = joints_o[x] * 0.9 + joints[x] * 0.1
+    #     time.sleep(0.1)
     # input("When done press enter")
     robot.move_pose(observation_pose)
     # Getting image

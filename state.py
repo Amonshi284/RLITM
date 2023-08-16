@@ -6,6 +6,7 @@ from ned import tictactoe_place
 
 BOARD_ROWS_COLS = 3
 
+
 class State:
     def __init__(self, p1, p2):
         self.board = np.zeros((BOARD_ROWS_COLS, BOARD_ROWS_COLS))
@@ -15,11 +16,11 @@ class State:
         self.boardHash = None
         self.playerSymbol = 1
 
-    def getHash(self):
+    def get_hash(self):
         self.boardHash = str(self.board.reshape(BOARD_ROWS_COLS * BOARD_ROWS_COLS))
         return self.boardHash
 
-    def availablePositions(self):
+    def available_positions(self):
         positions = []
         for i in range(BOARD_ROWS_COLS):
             for j in range(BOARD_ROWS_COLS):
@@ -27,7 +28,7 @@ class State:
                     positions.append((i, j))
         return positions
 
-    def updateState(self, position):
+    def update_state(self, position):
         self.board[position] = self.playerSymbol
         self.playerSymbol = -1 if self.playerSymbol == 1 else 1
 
@@ -58,56 +59,56 @@ class State:
             else:
                 return -1
 
-        if len(self.availablePositions()) == 0:
+        if len(self.available_positions()) == 0:
             self.isEnd = True
             return 0
 
         self.isEnd = False
         return None
 
-    def giveReward(self):
+    def give_reward(self):
         result = self.winner()
 
         if result == 1:
-            self.p1.feedReward(1)
-            self.p2.feedReward(0)
+            self.p1.feed_reward(1)
+            self.p2.feed_reward(0)
         elif result == -1:
-            self.p1.feedReward(0)
-            self.p2.feedReward(1)
+            self.p1.feed_reward(0)
+            self.p2.feed_reward(1)
         else:
-            self.p1.feedReward(0.1)
-            self.p2.feedReward(0.2)
+            self.p1.feed_reward(0.1)
+            self.p2.feed_reward(0.2)
 
     def play(self, rounds=100):
         for i in range(rounds):
             if i % 1000 == 0:
                 print("Rounds {}".format(i))
             while not self.isEnd:
-                positions = self.availablePositions()
-                p1_action = self.p1.chooseAction(positions, self.board, self.playerSymbol)
-                self.updateState(p1_action)
-                board_hash = self.getHash()
-                self.p1.addState(board_hash)
+                positions = self.available_positions()
+                p1_action = self.p1.choose_action(positions, self.board, self.playerSymbol)
+                self.update_state(p1_action)
+                board_hash = self.get_hash()
+                self.p1.add_state(board_hash)
 
                 win = self.winner()
                 if win is not None:
-                    self.showBoard()
-                    self.giveReward()
+                    self.show_board()
+                    self.give_reward()
                     self.p1.reset()
                     self.p2.reset()
                     self.reset()
                     break
                 else:
-                    positions = self.availablePositions()
-                    p2_action = self.p2.chooseAction(positions, self.board, self.playerSymbol)
-                    self.updateState(p2_action)
-                    board_hash = self.getHash()
-                    self.p2.addState(board_hash)
+                    positions = self.available_positions()
+                    p2_action = self.p2.choose_action(positions, self.board, self.playerSymbol)
+                    self.update_state(p2_action)
+                    board_hash = self.get_hash()
+                    self.p2.add_state(board_hash)
 
                     win = self.winner()
                     if win is not None:
-                        self.showBoard()
-                        self.giveReward()
+                        self.show_board()
+                        self.give_reward()
                         self.p1.reset()
                         self.p2.reset()
                         self.reset()
@@ -116,8 +117,8 @@ class State:
     def play2(self):
         while not self.isEnd:
             # Player 1
-            positions = self.availablePositions()
-            p1_action = self.p1.chooseAction(positions, self.board, self.playerSymbol)
+            positions = self.available_positions()
+            p1_action = self.p1.choose_action(positions, self.board, self.playerSymbol)
             # take action and update board state
 
             if isinstance(self.p1, player.Player):
@@ -141,12 +142,12 @@ class State:
                 elif p1_action == (2, 2):
                     point = 9
                 tictactoe_place(point)
-            self.updateState(p1_action)
-            self.showBoard()
+            self.update_state(p1_action)
+            self.show_board()
             # check board status if it is ended
             win = self.winner()
             if win is not None:
-                self.giveReward()
+                self.give_reward()
                 if win == 1:
                     print(self.p1.name, "wins!")
                     ned.robot.play_sound("mixkit-achievement-bell-600.wav")
@@ -157,8 +158,8 @@ class State:
 
             else:
                 # Player 2
-                positions = self.availablePositions()
-                p2_action = self.p2.chooseAction(positions, self.board, self.playerSymbol)
+                positions = self.available_positions()
+                p2_action = self.p2.choose_action(positions, self.board, self.playerSymbol)
                 if isinstance(self.p2, player.Player):
                     point = 0
                     if p2_action == (0, 0):
@@ -181,11 +182,11 @@ class State:
                         point = 9
                     tictactoe_place(point)
 
-                self.updateState(p2_action)
-                self.showBoard()
+                self.update_state(p2_action)
+                self.show_board()
                 win = self.winner()
                 if win is not None:
-                    self.giveReward()
+                    self.give_reward()
                     if win == -1:
                         print(self.p2.name, "wins!")
                         ned.robot.play_sound("mixkit-achievement-bell-600.wav")
@@ -200,7 +201,7 @@ class State:
         self.isEnd = False
         self.playerSymbol = 1
 
-    def showBoard(self):
+    def show_board(self):
         for i in range(0, BOARD_ROWS_COLS):
             print('-------------')
             out = '| '
