@@ -51,27 +51,27 @@ nnm_positions = [
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=1, y_rel=1, yaw_rel=0),  # 0
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=1, yaw_rel=0),  # 1
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0, y_rel=1, yaw_rel=0),  # 2
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0, y_rel=0.5, yaw_rel=0),  # 3
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0, y_rel=0, yaw_rel=0),  # 4
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=0, yaw_rel=0),  # 5
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=1, y_rel=0, yaw_rel=0),  # 6
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=1, y_rel=0.5, yaw_rel=0),  # 7
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.8, y_rel=0.8, yaw_rel=0),  # 8
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=0.8, yaw_rel=0),  # 9
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.2, y_rel=0.8, yaw_rel=0),  # 10
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.2, y_rel=0.5, yaw_rel=0),  # 11
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.2, y_rel=0.2, yaw_rel=0),  # 12
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=0.2, yaw_rel=0),  # 13
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.8, y_rel=0.2, yaw_rel=0),  # 14
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.8, y_rel=0.5, yaw_rel=0),  # 15
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.65, y_rel=0.65, yaw_rel=0),  # 16
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=0.65, yaw_rel=0),  # 17
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.35, y_rel=0.65, yaw_rel=0),  # 18
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=1, y_rel=0.5, yaw_rel=0),  # 7
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.8, y_rel=0.5, yaw_rel=0),  # 15
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.65, y_rel=0.5, yaw_rel=0),  # 23
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.35, y_rel=0.5, yaw_rel=0),  # 19
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.35, y_rel=0.35, yaw_rel=0),  # 20
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=0.35, yaw_rel=0),  # 21
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.2, y_rel=0.5, yaw_rel=0),  # 11
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0, y_rel=0.5, yaw_rel=0),  # 3
     robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.65, y_rel=0.35, yaw_rel=0),  # 22
-    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.65, y_rel=0.5, yaw_rel=0)  # 23
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=0.35, yaw_rel=0),  # 21
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.35, y_rel=0.35, yaw_rel=0),  # 20
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.8, y_rel=0.2, yaw_rel=0),  # 14
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=0.2, yaw_rel=0),  # 13
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.2, y_rel=0.2, yaw_rel=0),  # 12
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=1, y_rel=0, yaw_rel=0),  # 6
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0.5, y_rel=0, yaw_rel=0),  # 5
+    robot.get_target_pose_from_rel("Muehle_feld", height_offset=0.005, x_rel=0, y_rel=0, yaw_rel=0) # 4
     # robot.place_from_pose()
 ]
 
