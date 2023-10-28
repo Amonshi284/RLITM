@@ -24,10 +24,7 @@ solid_pose = PoseObject(
 )
 
 # Rampe
-pick_pose = PoseObject(
-    x=0.2, y=0.166, z=0.169,
-    roll=0.102, pitch=1.185, yaw=0.751,
-)
+pick_pose = robot.get_pose_saved("Rampe_TTT")
 # Place pose
 place_pose = PoseObject(
     x=0.0, y=-0.2, z=0.085,
@@ -65,14 +62,14 @@ def findstones(color, img_start):
     img_open = morphological_transformations(img_threshold, morpho_type=MorphoType.OPEN,
                                              kernel_shape=(11, 11), kernel_type=KernelType.ELLIPSE)
 
-    cnts = biggest_contours_finder(img_open, 9)
+    contours = biggest_contours_finder(img_open, 9)
 
-    img_contours = draw_contours(img_open, cnts)
+    img_contours = draw_contours(img_open, contours)
     img_bary = img_contours
     stones = []
     barycenter = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    for i in range(0, len(cnts)):
-        barycenter[i] = get_contour_barycenter(cnts[i])
+    for i in range(0, len(contours)):
+        barycenter[i] = get_contour_barycenter(contours[i])
         img_bary = draw_barycenter(img_bary, barycenter[i][0], barycenter[i][1])
         stones.append((barycenter[i][0], barycenter[i][1]))
 
@@ -129,21 +126,6 @@ def nmm_place(index):
 
 def find_new_pos(pos):
     time.sleep(3)
-    # robot.move_pose(preposition)
-    # robot.move_pose(solid_pose)
-    # robot.set_learning_mode(True)
-    # time.sleep(3)
-    # joints_o = robot.get_joints()
-    # robot_moved = False
-    # while not robot_moved:
-    #     joints = robot.get_joints()
-    #     for x in range(0, len(joints)):
-    #         if abs(joints[x] - joints_o[x]) > 0.0872665:
-    #             robot_moved = True
-    #             break
-    #         joints_o[x] = joints_o[x] * 0.9 + joints[x] * 0.1
-    #     time.sleep(0.1)
-    # input("When done press enter")
     robot.move_pose(observation_pose)
     # Getting image
     img_compressed = robot.get_img_compressed()
@@ -162,16 +144,14 @@ def find_new_pos(pos):
 
     spaces = []
     spaces = checkspaces(stones, img_workspace, spaces)
-    newpos = []
-    poscnt = 0
+    new_pos = []
     for p in pos:
         for s in spaces:
             if p == s:
-                newpos.append(p)
-                poscnt += 1
+                new_pos.append(p)
 
-    if poscnt == 1:
-        return newpos[0]
+    if len(new_pos) == 1:
+        return new_pos[0]
     else:
         print("Too many or too few stones")
         return find_new_pos(pos)

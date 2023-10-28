@@ -15,11 +15,14 @@ class State:
         self.isEnd = False
         self.boardHash = None
         self.playerSymbol = 1
+        self.losses = 0
+        self.wins = 0
 
     def get_hash(self):
         self.boardHash = str(self.board.reshape(BOARD_ROWS_COLS * BOARD_ROWS_COLS))
         return self.boardHash
 
+    # list open spaces
     def available_positions(self):
         positions = []
         for i in range(BOARD_ROWS_COLS):
@@ -32,6 +35,7 @@ class State:
         self.board[position] = self.playerSymbol
         self.playerSymbol = -1 if self.playerSymbol == 1 else 1
 
+    # check if one of the players has won
     def winner(self):
         for i in range(BOARD_ROWS_COLS):
             if sum(self.board[i,:]) == 3:
@@ -70,9 +74,11 @@ class State:
         result = self.winner()
 
         if result == 1:
+            self.wins += 1
             self.p1.feed_reward(1)
             self.p2.feed_reward(0)
         elif result == -1:
+            self.losses += 1
             self.p1.feed_reward(0)
             self.p2.feed_reward(1)
         else:
@@ -84,6 +90,7 @@ class State:
             if i % 1000 == 0:
                 print("Rounds {}".format(i))
             while not self.isEnd:
+                # give player 1 a list of open spaces and let him choose his action
                 positions = self.available_positions()
                 p1_action = self.p1.choose_action(positions, self.board, self.playerSymbol)
                 self.update_state(p1_action)
@@ -92,6 +99,7 @@ class State:
 
                 win = self.winner()
                 if win is not None:
+                    # show end state, give out rewards and reset for a new game
                     self.show_board()
                     self.give_reward()
                     self.p1.reset()
@@ -99,6 +107,7 @@ class State:
                     self.reset()
                     break
                 else:
+                    # give player 2 a list of open spaces and let him choose his action
                     positions = self.available_positions()
                     p2_action = self.p2.choose_action(positions, self.board, self.playerSymbol)
                     self.update_state(p2_action)
@@ -107,6 +116,7 @@ class State:
 
                     win = self.winner()
                     if win is not None:
+                        # show end state, give out rewards and reset for a new game
                         self.show_board()
                         self.give_reward()
                         self.p1.reset()
@@ -117,33 +127,7 @@ class State:
     def play2(self):
         while not self.isEnd:
             # Player 1
-            positions = self.available_positions()
-            p1_action = self.p1.choose_action(positions, self.board, self.playerSymbol)
-            # take action and update board state
-
-            if isinstance(self.p1, player.Player):
-                point = 0
-                if p1_action == (0, 0):
-                    point = 1
-                elif p1_action == (0, 1):
-                    point = 2
-                elif p1_action == (0, 2):
-                    point = 3
-                elif p1_action == (1, 0):
-                    point = 4
-                elif p1_action == (1, 1):
-                    point = 5
-                elif p1_action == (1, 2):
-                    point = 6
-                elif p1_action == (2, 0):
-                    point = 7
-                elif p1_action == (2, 1):
-                    point = 8
-                elif p1_action == (2, 2):
-                    point = 9
-                tictactoe_place(point)
-            self.update_state(p1_action)
-            self.show_board()
+            self.playerturn(self.p1)
             # check board status if it is ended
             win = self.winner()
             if win is not None:
@@ -158,32 +142,8 @@ class State:
 
             else:
                 # Player 2
-                positions = self.available_positions()
-                p2_action = self.p2.choose_action(positions, self.board, self.playerSymbol)
-                if isinstance(self.p2, player.Player):
-                    point = 0
-                    if p2_action == (0, 0):
-                        point = 1
-                    elif p2_action == (0, 1):
-                        point = 2
-                    elif p2_action == (0, 2):
-                        point = 3
-                    elif p2_action == (1, 0):
-                        point = 4
-                    elif p2_action == (1, 1):
-                        point = 5
-                    elif p2_action == (1, 2):
-                        point = 6
-                    elif p2_action == (2, 0):
-                        point = 7
-                    elif p2_action == (2, 1):
-                        point = 8
-                    elif p2_action == (2, 2):
-                        point = 9
-                    tictactoe_place(point)
-
-                self.update_state(p2_action)
-                self.show_board()
+                self.playerturn(self.p2)
+                # check board status if it is ended
                 win = self.winner()
                 if win is not None:
                     self.give_reward()
@@ -194,6 +154,36 @@ class State:
                         print("tie!")
                     self.reset()
                     break
+
+    def playerturn(self, p):
+        # Player 1
+        positions = self.available_positions()
+        p_action = p.choose_action(positions, self.board, self.playerSymbol)
+        # take action and update board state
+
+        if isinstance(p, player.Player):
+            point = 0
+            if p_action == (0, 0):
+                point = 1
+            elif p_action == (0, 1):
+                point = 2
+            elif p_action == (0, 2):
+                point = 3
+            elif p_action == (1, 0):
+                point = 4
+            elif p_action == (1, 1):
+                point = 5
+            elif p_action == (1, 2):
+                point = 6
+            elif p_action == (2, 0):
+                point = 7
+            elif p_action == (2, 1):
+                point = 8
+            elif p_action == (2, 2):
+                point = 9
+            tictactoe_place(point)
+        self.update_state(p_action)
+        self.show_board()
 
     def reset(self):
         self.board = np.zeros((BOARD_ROWS_COLS, BOARD_ROWS_COLS))

@@ -19,17 +19,18 @@ class Player:
         board_hash = str(board.reshape(BOARD_ROWS_COLS * BOARD_ROWS_COLS))
         return board_hash
 
+    # Choose action based on expected reward
     def choose_action(self, positions, current_board, symbol):
         if np.random.uniform(0, 1) < self.exp_rate:
             idx = np.random.choice(len(positions))
             action = positions[idx]
         else:
-            value_max = -999
+            value_max = 0
             for p in positions:
                 next_board = current_board.copy()
                 next_board[p] = symbol
-                next_boardHash = self.get_hash(next_board)
-                value = 0 if self.states_value.get(next_boardHash) is None else self.states_value.get(next_boardHash)
+                next_board_hash = self.get_hash(next_board)
+                value = 0 if self.states_value.get(next_board_hash) is None else self.states_value.get(next_board_hash)
 
                 if value >= value_max:
                     value_max = value
@@ -40,13 +41,14 @@ class Player:
     def add_state(self, state):
         self.states.append(state)
 
+    # update expected rewards for all states reached in this game
     def feed_reward(self, reward):
         for st in reversed(self.states):
             if self.states_value.get(st) is None:
                 self.states_value[st] = 0
             self.states_value[st] += self.lr * (reward - self.states_value[st])
             reward = self.states_value[st]
-        self.lr = max(self.lr * self.decay_gamma, 0.01)
+        self.lr = self.lr * self.decay_gamma
 
     def reset(self):
         self.states = []
@@ -69,11 +71,9 @@ class HumanPlayer:
     def choose_action(self, positions, _, __):
         return ned.find_new_pos(positions)
 
-    # append a hash state
     def add_state(self, state):
         pass
 
-    # at the end of game, backpropagate and update states value
     def feed_reward(self, reward):
         pass
 
